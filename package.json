@@ -1,0 +1,16 @@
+{
+  "name": "campusconnect",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CampusConnect — India's student-to-student college guidance platform",
+  "scripts": {
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "npm --prefix backend run dev",
+    "install:all": "npm --prefix frontend install && npm --prefix backend install",
+    "build": "npm --prefix backend run build && npm --prefix frontend run build",
+    "lint": "npm --prefix backend run lint && npm --prefix frontend run lint",
+    "seed": "npm --prefix backend run seed",
+    "docker:up": "docker compose up --build",
+    "docker:down": "docker compose down"
+  }
+}
