@@ -139,6 +139,7 @@ async function seed(): Promise<void> {
     User.deleteMany({ email: { $in: ['admin@campusconnect.in', 'aarav@iitb.ac.in'] } }),
     College.deleteMany({ slug: { $in: colleges.map((c) => c.slug) } }),
     Scholarship.deleteMany({ slug: { $in: scholarships.map((s) => s.slug) } }),
+    CommunityPost.deleteMany({}),
   ]);
 
   const createdColleges = await College.insertMany(colleges);

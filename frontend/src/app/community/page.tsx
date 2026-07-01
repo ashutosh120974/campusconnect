@@ -58,12 +58,12 @@ export default async function CommunityPage() {
                   <CardContent className="space-y-3 p-6">
                     <div className="flex items-center gap-3">
                       <Avatar className="h-9 w-9">
-                        <AvatarImage src={post.author.avatarUrl} alt={post.author.name} />
-                        <AvatarFallback>{initials(post.author.name)}</AvatarFallback>
+                        <AvatarImage src={post.author?.avatarUrl} alt={post.author?.name ?? "Member"} />
+                        <AvatarFallback>{initials(post.author?.name ?? "?")}</AvatarFallback>
                       </Avatar>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium">{post.author.name}</span>
-                        {post.author.verificationStatus === "verified" && (
+                        <span className="text-sm font-medium">{post.author?.name ?? "CampusConnect member"}</span>
+                        {post.author?.verificationStatus === "verified" && (
                           <VerifiedBadge label="Verified" />
                         )}
                       </div>
@@ -75,10 +75,10 @@ export default async function CommunityPage() {
                     <p className="line-clamp-2 text-sm text-muted-foreground">{post.body}</p>
                     <div className="flex items-center gap-4 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
-                        <Star className="h-3.5 w-3.5" /> {post.likes.length}
+                        <Star className="h-3.5 w-3.5" /> {post.likes?.length ?? 0}
                       </span>
                       <span className="flex items-center gap-1">
-                        <MessageSquare className="h-3.5 w-3.5" /> {post.commentCount}
+                        <MessageSquare className="h-3.5 w-3.5" /> {post.commentCount ?? 0}
                       </span>
                     </div>
                   </CardContent>

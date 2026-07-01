@@ -1,7 +1,9 @@
 import type { ApiResponse } from "@/types";
 
 const baseURL =
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000/api/v1";
+  process.env.SERVER_API_URL ??
+  process.env.NEXT_PUBLIC_API_URL ??
+  "http://localhost:5000/api/v1";
 
 /**
  * Server-side fetch helper for React Server Components.
