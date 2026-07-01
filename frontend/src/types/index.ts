@@ -110,6 +110,58 @@ export interface CommunityPost {
   createdAt: string;
 }
 
+export type VerificationStep =
+  | "email"
+  | "id_upload"
+  | "ocr"
+  | "admin_review"
+  | "complete";
+export type VerificationDecision =
+  | "pending"
+  | "ai_verified"
+  | "approved"
+  | "rejected"
+  | "reupload";
+
+export interface OcrResult {
+  studentName?: string;
+  collegeName?: string;
+  enrollmentNumber?: string;
+  course?: string;
+  branch?: string;
+  year?: string;
+  studentIdNumber?: string;
+  expiryDate?: string;
+  matched?: boolean;
+  confidence?: number;
+}
+
+export interface StudentVerification {
+  _id: string;
+  user: string | { _id: string; name: string; email: string; role: string; verificationStatus: string };
+  collegeEmail?: string;
+  collegeEmailVerified: boolean;
+  idFrontUrl?: string;
+  idBackUrl?: string;
+  selfieUrl?: string;
+  ocr?: OcrResult;
+  step: VerificationStep;
+  decision: VerificationDecision;
+  fraudFlags: string[];
+  adminNote?: string;
+  reviewedAt?: string;
+  updatedAt: string;
+  createdAt: string;
+}
+
+export interface AdminStats {
+  users: number;
+  ambassadors: number;
+  colleges: number;
+  pendingReviews: number;
+  aiVerified: number;
+}
+
 export interface PageMeta {
   total: number;
   page: number;
