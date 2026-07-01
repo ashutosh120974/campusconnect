@@ -6,6 +6,8 @@ import ambassadorRoutes from './ambassador.routes.js';
 import reviewRoutes from './review.routes.js';
 import communityRoutes from './community.routes.js';
 import referralRoutes from './referral.routes.js';
+import verificationRoutes from './verification.routes.js';
+import adminRoutes from './admin.routes.js';
 
 const router = Router();
 
@@ -20,5 +22,7 @@ router.use('/ambassadors', ambassadorRoutes);
 router.use('/reviews', reviewRoutes);
 router.use('/community', communityRoutes);
 router.use('/referrals', referralRoutes);
+router.use('/verification', verificationRoutes);
+router.use('/admin', adminRoutes);
 
 export default router;

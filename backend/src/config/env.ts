@@ -36,6 +36,25 @@ export const env = {
   otp: {
     ttlMinutes: optionalNumber('OTP_TTL_MINUTES', 10),
   },
+  apiUrl: required('API_URL', 'http://localhost:5000/api/v1'),
+  storage: {
+    // 'local' persists uploads to disk; 's3' is documented in the README as a
+    // drop-in driver once AWS credentials are configured.
+    driver: process.env.STORAGE_DRIVER ?? 'local',
+    uploadDir: process.env.UPLOAD_DIR ?? 'uploads',
+    maxFileBytes: optionalNumber('UPLOAD_MAX_BYTES', 5 * 1024 * 1024),
+  },
+  ocr: {
+    enabled: (process.env.OCR_ENABLED ?? 'true') !== 'false',
+    binary: process.env.TESSERACT_BIN ?? 'tesseract',
+    minConfidence: optionalNumber('OCR_MIN_CONFIDENCE', 0.6),
+    timeoutMs: optionalNumber('OCR_TIMEOUT_MS', 30_000),
+  },
+  // College email domains accepted for ambassador verification.
+  collegeEmailDomains: (process.env.COLLEGE_EMAIL_DOMAINS ?? '.ac.in,.edu.in,.edu,.ac.uk')
+    .split(',')
+    .map((d) => d.trim().toLowerCase())
+    .filter(Boolean),
 } as const;
 
 export type Env = typeof env;

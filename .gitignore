@@ -30,6 +30,9 @@ yarn-error.log*
 # Testing
 coverage/
 
+# Uploaded verification files (local storage driver)
+backend/uploads/
+
 # Misc
 *.tsbuildinfo
 next-env.d.ts

@@ -2,10 +2,13 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { GraduationCap, Menu, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { BadgeCheck, GraduationCap, LogOut, Menu, ShieldCheck, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { useAuth } from "@/context/auth-provider";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -15,18 +18,74 @@ const navLinks = [
   { href: "/ambassadors", label: "Ambassadors" },
   { href: "/blog", label: "Blog" },
   { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
 ];
 
 export function Navbar() {
   const [open, setOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
+  const { user, loading, logout } = useAuth();
+  const router = useRouter();
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const onLogout = async () => {
+    await logout();
+    setOpen(false);
+    router.push("/");
+    router.refresh();
+  };
+
+  const isVerified = user?.verificationStatus === "verified";
+
+  const authArea = (mobile = false) => {
+    if (loading) {
+      return <div className="h-9 w-24 animate-pulse rounded-full bg-muted" />;
+    }
+    if (!user) {
+      return (
+        <>
+          <Button variant={mobile ? "outline" : "ghost"} className={mobile ? "flex-1" : ""} asChild>
+            <Link href="/login" onClick={() => setOpen(false)}>Login</Link>
+          </Button>
+          <Button className={mobile ? "flex-1" : ""} asChild>
+            <Link href="/signup" onClick={() => setOpen(false)}>Signup</Link>
+          </Button>
+        </>
+      );
+    }
+    return (
+      <div className={cn("flex items-center gap-2", mobile && "w-full flex-col items-stretch")}>
+        {user.role === "admin" ? (
+          <Button variant="outline" asChild>
+            <Link href="/admin" onClick={() => setOpen(false)}>
+              <ShieldCheck className="h-4 w-4" /> Admin
+            </Link>
+          </Button>
+        ) : isVerified ? (
+          <Badge variant="verified" className="h-9 px-3">
+            <BadgeCheck className="h-4 w-4" /> Verified
+          </Badge>
+        ) : (
+          <Button variant="outline" asChild>
+            <Link href="/verify" onClick={() => setOpen(false)}>
+              <BadgeCheck className="h-4 w-4" /> Get Verified
+            </Link>
+          </Button>
+        )}
+        <span className="hidden max-w-[140px] truncate text-sm font-medium sm:inline">
+          {user.name}
+        </span>
+        <Button variant="ghost" size={mobile ? "default" : "icon"} onClick={onLogout} aria-label="Log out">
+          <LogOut className="h-4 w-4" />
+          {mobile && <span>Log out</span>}
+        </Button>
+      </div>
+    );
+  };
 
   return (
     <header
@@ -59,12 +118,7 @@ export function Navbar() {
 
         <div className="hidden items-center gap-2 lg:flex">
           <ThemeToggle />
-          <Button variant="ghost" asChild>
-            <Link href="/login">Login</Link>
-          </Button>
-          <Button asChild>
-            <Link href="/signup">Signup</Link>
-          </Button>
+          {authArea()}
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
@@ -93,14 +147,7 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <div className="mt-2 flex gap-2">
-              <Button variant="outline" className="flex-1" asChild>
-                <Link href="/login">Login</Link>
-              </Button>
-              <Button className="flex-1" asChild>
-                <Link href="/signup">Signup</Link>
-              </Button>
-            </div>
+            <div className="mt-2 flex gap-2">{authArea(true)}</div>
           </div>
         </div>
       )}

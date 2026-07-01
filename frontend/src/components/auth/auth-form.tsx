@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { login, register as registerUser } from "@/services/auth";
+import { useAuth } from "@/context/auth-provider";
 
 const loginSchema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -29,6 +30,7 @@ type Mode = "login" | "signup";
 
 export function AuthForm({ mode }: { mode: Mode }) {
   const router = useRouter();
+  const { refresh } = useAuth();
   const [serverError, setServerError] = React.useState<string | null>(null);
   const isLogin = mode === "login";
 
@@ -48,6 +50,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
       } else {
         await registerUser(values);
       }
+      await refresh();
       router.push("/");
       router.refresh();
     } catch (err) {

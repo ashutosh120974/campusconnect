@@ -11,6 +11,8 @@ RUN npm run build
 FROM node:22-alpine AS runtime
 WORKDIR /app
 ENV NODE_ENV=production
+# Tesseract OCR engine (used by the student-verification pipeline)
+RUN apk add --no-cache tesseract-ocr tesseract-ocr-data-eng
 COPY package*.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 COPY --from=build /app/dist ./dist
